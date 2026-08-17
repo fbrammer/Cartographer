@@ -20,26 +20,25 @@ order used so a later pass can retrace it.
    silently folded into its parent's card — never left dangling as an
    implied-but-uncarded reference.
 
-## This territory (FamilyAI journal + session-state), as walked for `examples.md`
+## This territory (AgentSwarm's dispatch layer), as walked for `examples.md`
 
-1. Entry point: `familyai-workspace` plugin's `register()` /
-   `on_session_start` hook (`__init__.py`) — this is what every session
-   actually executes first.
-2. Outward to what that hook calls: `bootstrap()` and `load_contract()`
-   in `workspace_bootstrap.py` → the **workspace contract** card.
-3. Outward again to what the contract's *consumer* (`build_directive()`)
-   reads, and separately to what `bootstrap()` itself constructs
-   (`JournalStore`) → the **JournalStore** card.
-4. Sideways from JournalStore to the second class living in the same
-   source file (`SessionLogStore`) — found by reading the file, not by
-   assuming one class per file.
-5. Sideways again to the **session ledger** (`ledger.py`), reached
-   because `session-log`'s `SKILL.md` names it as what the skill
-   watches — not because it shares a folder with anything already
-   walked.
-6. Two items surfaced during this walk that weren't destinations of an
-   edge at all: the `auto_journal.py` filename (noticed while reading
-   `session-log`'s directory listing) and the `familyai journal` CLI
-   (noticed only because prior planning notes named it and a grep found
-   nothing) — filed as **leftover** and **ghost** cards respectively
+1. Entry point: `orchestrate.py`'s `call()` function — every subcommand
+   (`cmd_run`, `cmd_retry`, `cmd_refresh_apply`'s `call_fn`) routes
+   through it, making it the true front door regardless of which
+   subcommand a reader invokes first.
+2. Outward to what `call()` can branch to: `hermes_client.py`,
+   `or_client.py`, `gemini_client.py` — found by reading the branch
+   itself (`orchestrate.py:46-53`), not by trusting the module
+   docstring's role list, which only describes the free-tier roles in
+   prose and doesn't enumerate the code branches.
+3. Sideways to `roles.json`, reached because it's the thing that decides
+   which branch actually fires — read directly (grepped every
+   `"provider"` value) rather than trusting AGENT.md's description of
+   it, which is what surfaced the live/leftover split: all 11 entries
+   say `"hermes"`, so two of the three branches found in step 2 are
+   currently unreached.
+4. One item surfaced during this walk that wasn't the destination of an
+   edge at all: `run_checker`, noticed only because the module docstring
+   (read in full while orienting on `call()`) names it and a grep found
+   no matching function anywhere in the file — filed as a **ghost**
    rather than silently dropped.

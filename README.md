@@ -23,7 +23,7 @@ exists to prevent. See `rules.md` rule 6.
 |---|---|
 | `identity.md` | Who the cartographer is, what it walks, who the later reader is |
 | `rules.md` | What counts as a noun/movement, live/leftover/ghost, Hits/Does-not-hit, the no-copy and no-slurp rules, walk order |
-| `examples.md` | One worked map of a real territory — FamilyAI's journal + session-state subsystem — with a catalog, five cards, and a real Hits/Does-not-hit example |
+| `examples.md` | One worked map of a real territory — AgentSwarm's dispatch layer — with a catalog, five cards, and a real Hits/Does-not-hit example |
 | `reference/card-types.md` | The closed set of card shapes (noun card, ghost card, collision note, catalog) |
 | `reference/walk-order.md` | The general walk procedure, plus the exact order used for the worked example |
 | `reference/naming-collisions.md` | The specific word-collisions found in the worked example's territory |
@@ -70,9 +70,12 @@ it's a photocopy. None of those are this.
 
 ## Worked example, in short
 
-`examples.md` maps five real objects in `Projects/FamilyAI`'s journal
-subsystem — the workspace contract, `JournalStore`, the session ledger,
-one honest leftover filename, and one genuine ghost (`familyai journal`,
-a CLI referenced in planning notes that has no file behind it anywhere in
-the repo). The later reader is a fresh model session with no memory of
-the project's history — the actual, recurring reader for this territory.
+`examples.md` maps five real objects in `Projects/AgentSwarm`'s dispatch
+layer — the `call()` provider router, `roles.json`, the one provider
+client every current role actually reaches, two documented-as-leftover
+provider clients that are wired in but currently unreferenced by any
+role, and one genuine ghost (`run_checker`, named in the module's own
+docstring, grep-confirmed to not exist anywhere in the file). The later
+reader is a fresh model session picking up AgentSwarm to dispatch a task
+with no memory of how the provider routing evolved — the actual,
+recurring reader for this territory.

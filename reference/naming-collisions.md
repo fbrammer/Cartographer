@@ -1,40 +1,30 @@
 # Reference: naming collisions in this territory
 
-Per `rules.md` rule 8. Found while walking FamilyAI's journal +
-session-state subsystem for `examples.md`.
+Per `rules.md` rule 8. Found while walking AgentSwarm's dispatch layer
+for `examples.md`.
 
-## "Journal" (two things)
+## "Checker" (a role name vs. a removed mechanism)
 
-- **The human journal** — the `journal` trigger word, `JOURNAL.md`,
-  `entries/`, `index.jsonl`, owned exclusively by `JournalStore`
-  (`scripts/journal/journal_store.py:57`).
-- **`journal_state`** — a key inside the workspace contract dict
-  (`workspace_bootstrap.py:53`), pointing at `<root>/Journal/state` — a
-  *directory*, not the human journal itself. It's the parent of both
-  `state/sessions/` (session ledger) and `state/session-log/`
-  (SessionLogStore's output), neither of which is "the journal" in the
-  human-trigger sense.
+`roles.json` has a live entry literally named `checker_hermes` — a real,
+reachable role. The module docstring in `orchestrate.py` separately talks
+about "no configured checker model" and a removed `run_checker` function
+(see the **ghost card** in `examples.md`). These are not the same thing:
+`checker_hermes` is a normal worker role like any other coder role, while
+the docstring's "checker" is a description of an old, now-removed design
+where checking judgment lived in Python rather than in the driving Claude
+session. Reading `checker_hermes` in `roles.json` and assuming it wires
+up to whatever the docstring's "checker" discussion describes would be
+wrong — trace the actual dispatch instead (`call()`, per the worked
+example) rather than pattern-matching on the word.
 
-A reader who sees `journal_state` in the contract and assumes it means
-"where JournalStore writes" will misread every card downstream of it.
+## "Provider" (a `roles.json` field vs. the Hermes CLI's own `--provider` flag)
 
-## "Session log" vs "session ledger" (two things, one folder apart)
-
-- **Session ledger** — `ledger.py`'s raw per-session event file,
-  `<state>/sessions/<session_id>.ledger.json`.
-- **Session log** — the human-readable milestone narrative,
-  `<state>/session-log/SESSION-LOG.md` (+ `session-log.jsonl`), produced
-  by `SessionLogStore` *from* the ledger's events.
-
-The ledger is upstream data; the log is the derived narrative. Renaming
-one skill folder to "session-log" (from "auto-journal") makes this pair
-sound even more alike than before — worth restating any time both are
-mentioned in the same card.
-
-## `journal_store.py` (one file, two classes)
-
-`scripts/journal/journal_store.py` defines both `JournalStore` (line 57)
-and `SessionLogStore` (line 192). A diff or a commit message that just
-says "changed journal_store.py" tells you nothing about which of the two
-disjoint output-file sets actually moved — check which class the diff
-touches before assuming either card in `examples.md` is affected.
+Every `roles.json` entry has a `"provider"` key — but for entries with
+`"provider": "hermes"`, there is a *second*, unrelated provider concept
+one level down: `hermes_provider` (e.g. `"google"`, `"nvidia"`), which
+becomes the Hermes CLI's own `--provider` flag. `call()`'s `"provider"`
+picks which Python client module handles the request
+(`hermes_client.py` vs `or_client.py` vs `gemini_client.py`); the
+role's `hermes_provider` (only meaningful when the outer `"provider"` is
+`"hermes"`) picks which upstream service Hermes itself talks to. Two
+different routing decisions, same word, one level of nesting apart.
