@@ -65,7 +65,7 @@ reasoning_effort?}`. Every single one of the 11 current entries
 (`coder_fast`, `coder_cheap`, `coder_heavy`, `checker_hermes`, three
 `research_assistant_*`, four `gemini_*`) sets `"provider": "hermes"` —
 confirmed by grepping the file for `"provider"` values, not by reading
-the AGENT.md description of it. `model_refresh.py`'s `refresh-apply`
+the AGENTS.md description of it. `model_refresh.py`'s `refresh-apply`
 subcommand is the only thing that rewrites this file at runtime (via
 `save_roles`); everything else only reads it.
 
@@ -87,7 +87,7 @@ nothing does.
 
 The only provider client any current `roles.json` entry actually reaches
 — wraps the local `hermes` CLI, passing both `-m <model>` and
-`--provider <hermes_provider>` explicitly (per AGENT.md's documented
+`--provider <hermes_provider>` explicitly (per AGENTS.md's documented
 finding that omitting `--provider` silently lands on the wrong model via
 Hermes's generic fallback chain). `model_refresh.py`'s `call_fn` also
 routes through this client specifically, not through `call()` — the
@@ -110,7 +110,7 @@ Both are real, complete, independently working clients — `or_client.py`
 for OpenRouter, `gemini_client.py` for the plain Gemini API — and both
 are still imported by `orchestrate.py` and wired into `call()`'s branch
 logic. Neither is dead in the sense of being broken or orphaned: both are
-documented in AGENT.md as deliberate escape hatches (`or_client.py` for
+documented in AGENTS.md as deliberate escape hatches (`or_client.py` for
 any future role that sets `"provider": "openrouter"`; `gemini_client.py`
 kept "as a manual escape hatch" after Gemini-family roles were re-routed
 through Hermes on 2026-07-24 for its fallback-chain value). The leftover

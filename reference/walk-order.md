@@ -33,7 +33,7 @@ order used so a later pass can retrace it.
    prose and doesn't enumerate the code branches.
 3. Sideways to `roles.json`, reached because it's the thing that decides
    which branch actually fires — read directly (grepped every
-   `"provider"` value) rather than trusting AGENT.md's description of
+   `"provider"` value) rather than trusting AGENTS.md's description of
    it, which is what surfaced the live/leftover split: all 11 entries
    say `"hermes"`, so two of the three branches found in step 2 are
    currently unreached.
